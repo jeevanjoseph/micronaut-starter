@@ -1,0 +1,21 @@
+name: Snapshot to OCI
+on:
+  push:
+    branches:
+      - test-snapshot
+jobs:
+  deploy:
+    name: Deploy job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v1
+      - name: Run Tests
+        run: ./gradlew starter-api:test starter-web-netty:test starter-gcp-function:shadowJar
+      - name: Build Docker image
+        run: |
+          docker build . --tag iad.ocir.io/${{ secrets.OCI_REPO }}/${{ secrets.OCI_SNAPSHOT_APP_NAME }}:snapshot -f DockerfileCloudRun
+      
+      - name: Push image to Google Cloud Container Registry
+        run: docker push iad.ocir.io/${{ secrets.OCI_REPO }}/${{ secrets.OCI_SNAPSHOT_APP_NAME }}:snapshot
+     
