@@ -15,6 +15,9 @@ jobs:
       - name: Build Docker image
         run: |
           docker build . --tag iad.ocir.io/${{ secrets.OCI_REPO }}/${{ secrets.OCI_SNAPSHOT_APP_NAME }}:snapshot -f DockerfileCloudRun
+      - name: Docker login
+        run: |
+          docker login --username ${{ secrets.OCIR_USERNAME }} --password ${{ secrets.OCIR_TOKEN }} iad.ocir.io
       
       - name: Push image to Google Cloud Container Registry
         run: docker push iad.ocir.io/${{ secrets.OCI_REPO }}/${{ secrets.OCI_SNAPSHOT_APP_NAME }}:snapshot
