@@ -2,7 +2,7 @@ name: Snapshot to OCI
 on:
   push:
     branches:
-      - test-snapshot
+      - oci-deploy
 jobs:
   deploy:
     name: Deploy job
